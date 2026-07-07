@@ -1,0 +1,289 @@
+.stageWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.flashOverlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.4) 0%, #020204 80%);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bgStage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #05060a;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- Video layers ---------- */
+
+.bgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(60px) saturate(1.1) brightness(0.2);
+  transform: scale(1.15);
+  opacity: 0.75;
+  z-index: 0;
+}
+
+.fgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: none;
+  opacity: 1;
+}
+
+/* ---------- Gradient + vignette overlays ---------- */
+
+.gradientTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15%;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 2, 4, 0.75) 0%,
+    rgba(2, 2, 4, 0) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gradientBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20%;
+  background: linear-gradient(
+    0deg,
+    rgba(2, 2, 4, 0.8) 0%,
+    rgba(2, 2, 4, 0) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: transparent;
+}
+
+/* ---------- Three.js particle canvas layer ---------- */
+
+.particleLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* ---------- Floating Controls (glassmorphism) ---------- */
+
+.floatingControls {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 100;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.controlButton:hover {
+  background: rgba(255, 138, 61, 0.2);
+  border-color: rgba(255, 178, 122, 0.4);
+  transform: scale(1.08);
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+/* ---------- Sound hint badge ---------- */
+
+.soundHint {
+  position: absolute;
+  left: calc(100% + 1rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.soundHintPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-warm);
+  box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.7);
+  animation: pulseRing 1.8s ease-out infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 138, 61, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 138, 61, 0);
+  }
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  opacity: 0;
+  filter: brightness(0.35) saturate(1.1);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+/* ---------- Content scroll overlay ---------- */
+
+.scrollOverlay {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .floatingControls {
+    bottom: 1.5rem;
+    left: 1.5rem;
+  }
+
+  .soundHint {
+    display: none; /* Hide hint on small screens to avoid clutter */
+  }
+}
+
+/* ---------- Audio Telemetry Alert Banner ---------- */
+
+.audioAlertBanner {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.75rem;
+  background: rgba(5, 6, 10, 0.85);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25), inset 0 0 10px rgba(6, 182, 212, 0.1);
+  border-radius: 4px;
+  z-index: 999;
+  cursor: pointer;
+  pointer-events: auto;
+  font-family: monospace;
+  animation: telemetryPulse 2s infinite ease-in-out;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.audioAlertBanner:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: #06b6d4;
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.5), inset 0 0 15px rgba(6, 182, 212, 0.2);
+}
+
+.audioAlertDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #06b6d4;
+  box-shadow: 0 0 10px #06b6d4;
+  animation: audioAlertDotPulse 1.2s infinite ease-out;
+}
+
+.audioAlertText {
+  color: #06b6d4;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 5px rgba(6, 182, 212, 0.5);
+}
+
+@keyframes telemetryPulse {
+  0%, 100% {
+    opacity: 0.85;
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+  }
+  50% {
+    opacity: 1;
+    border-color: rgba(6, 182, 212, 0.8);
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  }
+}
+
+@keyframes audioAlertDotPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(6, 182, 212, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+  }
+}
