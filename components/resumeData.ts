@@ -84,7 +84,6 @@ export const resumeData = {
       title: "TruthLens AI",
       subtitle: "Video Analysis Platform",
       description: "Developed and deployed a full-stack AI platform for multilingual misinformation detection using NLP, secure REST APIs, and cloud-based architecture.",
-      demoUrl: "https://truth-l-ens-ai-front-end.vercel.app/", // Replace with live demo URL if available
       githubUrl: "https://github.com/Vaibhav-Hades/TruthLensAI", // Replace with project GitHub
       tags: ["Python", "React", "NLP", "Machine Learning", "FastAPI"]
     },

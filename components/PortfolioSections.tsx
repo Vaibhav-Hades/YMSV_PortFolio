@@ -15,26 +15,23 @@ export default function PortfolioSections() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("sending");
-    
+
     try {
-      const form = new FormData();
-      form.append("name", formData.name);
-      form.append("email", formData.email);
-      form.append("_subject", formData.subject ? `[Portfolio] ${formData.subject}` : `New message from ${formData.name}`);
-      form.append("message", formData.message);
-
-      const response = await fetch(`https://formsubmit.co/ajax/${resumeData.email}`, {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        body: form
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
       });
-      
-      const result = await response.json();
-      console.log("FormSubmit Result:", result);
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         setFormStatus("success");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
+        console.error("Form submit error:", result);
         setFormStatus("error");
       }
     } catch (error) {
