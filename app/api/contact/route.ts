@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     }
 
     const accessKey = process.env.WEB3FORMS_ACCESS_KEY?.trim();
+    const toEmail = process.env.CONTACT_TO_EMAIL?.trim() || "2400030527cse3@gmail.com";
 
     if (!accessKey) {
       return Response.json(
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         access_key: accessKey,
+        to_email: toEmail,
         name,
         email,
         subject: `[Portfolio] ${subject}`,
