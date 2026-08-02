@@ -1,5 +1,3 @@
-import { resumeData } from "../../../components/resumeData";
-
 export async function POST(request: Request) {
   try {
     const payload = await request.json();
@@ -15,31 +13,45 @@ export async function POST(request: Request) {
       );
     }
 
-    const form = new URLSearchParams();
-    form.append("name", name);
-    form.append("email", email);
-    form.append("_subject", subject ? `[Portfolio] ${subject}` : `New message from ${name}`);
-    form.append("message", message);
-    form.append("_captcha", "false");
-    form.append("_template", "table");
+    const accessKey = process.env.WEB3FORMS_ACCESS_KEY?.trim();
 
-    const response = await fetch(`https://formsubmit.co/ajax/${resumeData.email}`, {
+    if (!accessKey) {
+      return Response.json(
+        {
+          success: false,
+          message: "Contact email service is not configured yet. Add WEB3FORMS_ACCESS_KEY to your deployment environment."
+        },
+        { status: 500 }
+      );
+    }
+
+    const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
       },
-      body: form.toString()
+      body: JSON.stringify({
+        access_key: accessKey,
+        name,
+        email,
+        subject: `[Portfolio] ${subject}`,
+        message,
+        from_name: name,
+        replyto: email
+      })
     });
 
-    const contentType = response.headers.get("content-type") || "";
-    const result = contentType.includes("application/json")
-      ? await response.json()
-      : await response.text();
+    const result = await response.json();
 
-    if (!response.ok) {
+    if (!response.ok || !result.success) {
+      console.error("Web3Forms delivery error:", result);
       return Response.json(
-        { success: false, message: "Unable to send message right now. Please try again later.", result },
+        {
+          success: false,
+          message: "Unable to send message right now. Please try again later.",
+          result
+        },
         { status: 502 }
       );
     }
