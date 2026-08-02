@@ -11,6 +11,7 @@ export default function PortfolioSections() {
   const [activeSection, setActiveSection] = useState("hero");
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [formErrorMessage, setFormErrorMessage] = useState("");
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,9 +30,11 @@ export default function PortfolioSections() {
 
       if (response.ok && result.success) {
         setFormStatus("success");
+        setFormErrorMessage("");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         console.error("Form submit error:", result);
+        setFormErrorMessage(result?.message || "Unable to send message right now. Please try again later.");
         setFormStatus("error");
       }
     } catch (error) {
@@ -472,8 +475,11 @@ export default function PortfolioSections() {
                   <div className={styles.successContainer}>
                     <div className={styles.errorIcon}>✗</div>
                     <h3>Sending Failed</h3>
-                    <p>There was a problem sending your message. Please check your connection or try again later.</p>
-                    <button onClick={() => setFormStatus("idle")} className={styles.sendBtn} style={{ maxWidth: '240px' }}>
+                    <p>{formErrorMessage || "There was a problem sending your message. Please check your connection or try again later."}</p>
+                    <button onClick={() => {
+                      setFormErrorMessage("");
+                      setFormStatus("idle");
+                    }} className={styles.sendBtn} style={{ maxWidth: '240px' }}>
                       Try Again
                     </button>
                   </div>
